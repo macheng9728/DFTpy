@@ -1,0 +1,152 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Pseudopotentials for OF-DFT &mdash; DFTpy 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/dftpy.ico"/>
+      <script src="_static/documentation_options.js?v=51b770b3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DFTpy
+              <img src="_static/dftpy.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contacts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Stable releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ofdft.html">How does DFTpy work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LPP.html">Local Pseudopotentials (LPPs) for OF-DFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DFTpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Local Pseudopotentials for OF-DFT</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/pavanello-research-group/dftpy/tree/master/doc/Pseudopotentials.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="local-pseudopotentials-for-of-dft">
+<span id="pseudopotentials"></span><h1>Local Pseudopotentials for OF-DFT<a class="headerlink" href="#local-pseudopotentials-for-of-dft" title="Link to this heading">¶</a></h1>
+<section id="local-pseudopotentials-lpps">
+<h2>Local Pseudopotentials (LPPs)<a class="headerlink" href="#local-pseudopotentials-lpps" title="Link to this heading">¶</a></h2>
+<p>Orbital-Free Density Functional Theory (OF-DFT) relies solely on the electron density, meaning that only local pseudopotentials can be used to compute the ion-electron potential, :math:V_{ne}(mathbf{r}). Typically, pseudopotentials include nonlocal components (NLPPs), which require knowledge of the one-electron density matrix (DM1). However, in this context, the density matrix is expressed as a functional of the density, :math:gamma_{1}[n(mathbf{r})], which is not yet available.</p>
+<p>Several types of local pseudopotentials (LPPs) have been developed and successfully applied to specific materials, including:</p>
+<p>Bulk-derived Local Pseudopotentials (BLP &lt;<a class="reference external" href="https://doi.org/10.1103/PhysRevB.69.125109">https://doi.org/10.1103/PhysRevB.69.125109</a>&gt;_)
+High-quality Local Pseudopotentials (HQLPP &lt;<a class="reference external" href="https://pubs.acs.org/doi/10.1021/acs.jctc.4c00101">https://pubs.acs.org/doi/10.1021/acs.jctc.4c00101</a>&gt;_)
+Optimized Effective Local Pseudopotentials (OEPP &lt;<a class="reference external" href="https://doi.org/10.1063/1.4944989">https://doi.org/10.1063/1.4944989</a>&gt;_)
+A new set of local pseudopotentials for transition metals is available at the following link: LPPs &lt;<a class="reference external" href="https://valeriarv99.github.io/OFPP/">https://valeriarv99.github.io/OFPP/</a>&gt;_. These LPPs effectively invert nonlocal pseudopotentials (NLPPs) by introducing a short-range correction while preserving the Coulomb tail of the GBRV and PSL pseudopotentials.</p>
+<p>If you want to construct your own LPP, follow this tutorial &lt;<a class="reference external" href="http://dftpy.rutgers.edu/tutorials/jupyter/lpps.html">http://dftpy.rutgers.edu/tutorials/jupyter/lpps.html</a>&gt;_. The formalism behind this new class of pseudopotentials is described in the paper <em>Pseudononlocal Pseudopotentials for Orbital-Free DFT</em>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Pavanello Research Group.
+      <span class="lastupdated">Last updated on Thursday, 24 Jul 2025 14:03:30.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

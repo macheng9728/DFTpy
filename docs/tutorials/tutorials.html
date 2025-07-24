@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorials &mdash; DFTpy 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../_static/dftpy.ico"/>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimization of Density" href="ofdft/optimize.html" />
+    <link rel="prev" title="Installation" href="../install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            DFTpy
+              <img src="../_static/dftpy.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contacts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#config-of-dftpy-script">Config of DFTpy script</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ofdft">OFDFT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ofdft/optimize.html">Optimization of Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ofdft/relax.html">Relaxation of Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ofdft/md.html">Molecular Dynamics Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#local-pseudopotentials">Local Pseudopotentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spin-unrestricted-calculation">Spin unrestricted calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tddft">TDDFT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tddft/propagate.html">Use of Propagator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#do-it-on-a-jupyter-notebook">Do it on a Jupyter Notebook!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html">Stable releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ofdft.html">How does DFTpy work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LPP.html">Local Pseudopotentials (LPPs) for OF-DFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">DFTpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tutorials</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=../genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/pavanello-research-group/dftpy/tree/master/doc/tutorials/tutorials.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ofdft/optimize.html" class="btn btn-neutral float-right" title="Optimization of Density" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tutorials">
+<span id="id1"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
+<section id="config-of-dftpy-script">
+<h2>Config of DFTpy script<a class="headerlink" href="#config-of-dftpy-script" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="ofdft">
+<h2>OFDFT<a class="headerlink" href="#ofdft" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ofdft/optimize.html">Optimization of Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ofdft/relax.html">Relaxation of Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ofdft/md.html">Molecular Dynamics Simulation</a></li>
+</ul>
+</div>
+</section>
+<section id="local-pseudopotentials">
+<h2>Local Pseudopotentials<a class="headerlink" href="#local-pseudopotentials" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="jupyter/lpps.html"><span class="doc">Build your own LPP</span></a>.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="spin-unrestricted-calculation">
+<h2>Spin unrestricted calculation<a class="headerlink" href="#spin-unrestricted-calculation" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="jupyter/Al-nspin_dftpy_dev.html"><span class="doc">Spin unrestricted calculation of Al</span></a>.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="tddft">
+<h2>TDDFT<a class="headerlink" href="#tddft" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tddft/propagate.html">Use of Propagator</a></li>
+</ul>
+</div>
+</section>
+<section id="do-it-on-a-jupyter-notebook">
+<h2>Do it on a Jupyter Notebook!<a class="headerlink" href="#do-it-on-a-jupyter-notebook" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="jupyter/density_optimization.html"><span class="doc">Density Optimization</span></a>.</p></li>
+<li><p><a class="reference internal" href="jupyter/td-ofdft-tutorial.html"><span class="doc">TD-OFDFT</span></a>.</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ofdft/optimize.html" class="btn btn-neutral float-right" title="Optimization of Density" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Pavanello Research Group.
+      <span class="lastupdated">Last updated on Thursday, 24 Jul 2025 14:03:30.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

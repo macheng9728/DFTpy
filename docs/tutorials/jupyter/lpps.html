@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build your own optimized local pseudopotential (LPP) &mdash; DFTpy 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+    <link rel="shortcut icon" href="../../_static/dftpy.ico"/>
+      <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DFTpy
+              <img src="../../_static/dftpy.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contacts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Stable releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ofdft.html">How does DFTpy work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LPP.html">Local Pseudopotentials (LPPs) for OF-DFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DFTpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Build your own optimized local pseudopotential (LPP)</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=../../genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/pavanello-research-group/dftpy/tree/master/doc/tutorials/jupyter/lpps.ipynb">Source</a>
+          
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Build-your-own-optimized-local-pseudopotential-(LPP)">
+<h1>Build your own optimized local pseudopotential (LPP)<a class="headerlink" href="#Build-your-own-optimized-local-pseudopotential-(LPP)" title="Link to this heading">¶</a></h1>
+<p>In this tutorial you will be able to build you own LPP for Au.</p>
+<ul class="simple">
+<li><p>Run a KS calculation to get the electronic density using <a class="reference external" href="http://qepy.rutgers.edu/">QEpy</a></p></li>
+<li><p>Perform a OF calculation to optimize <span class="math notranslate nohighlight">\(v_{LPP}(\mathbf{r})\)</span></p></li>
+<li><p>Test the generated LPP by comparing against the phonon spectra from <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/phonons.html#module-ase.phonons">EMT</a> from <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/">ASE</a></p></li>
+</ul>
+</section>
+<section id="QEpy">
+<h1>QEpy<a class="headerlink" href="#QEpy" title="Link to this heading">¶</a></h1>
+<p>First we need to generate the target electron density using QEpy, for that we will need to load the following modules</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qepy.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">QEInput</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qepy.driver</span><span class="w"> </span><span class="kn">import</span> <span class="n">Driver</span>
+</pre></div>
+</div>
+</div>
+<p>The following step is to build the crystal structure of FCC Au with ASE (feel free to use other phases)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ase.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">bulk</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">bulk</span><span class="p">(</span><span class="s1">&#39;Au&#39;</span><span class="p">,</span> <span class="s1">&#39;fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.078</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Once the structure is built we set up the necessary options to instance the QEpy driver (refer to QE pw.x for details) and perform a scf calculation</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qe_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;&amp;control&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;calculation&#39;</span><span class="p">:</span> <span class="s2">&quot;&#39;scf&#39;&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;prefix&#39;</span><span class="p">:</span> <span class="s2">&quot;&#39;tmp&#39;&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;pseudo_dir&#39;</span><span class="p">:</span> <span class="s2">&quot;&#39;../DATA&#39;&quot;</span><span class="p">},</span>
+    <span class="s1">&#39;&amp;system&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;ibrav&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;degauss&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+        <span class="s1">&#39;ecutwfc&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s1">&#39;ecutrho&#39;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+        <span class="s1">&#39;occupations&#39;</span><span class="p">:</span> <span class="s2">&quot;&#39;smearing&#39;&quot;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;&amp;electrons&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;conv_thr&#39;</span> <span class="p">:</span> <span class="mf">1.0e-8</span><span class="p">},</span>
+     <span class="s1">&#39;atomic_species&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Au 196.96657 au_lda_v1.uspp.F.UPF&#39;</span><span class="p">],</span>
+     <span class="s1">&#39;k_points automatic&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;11 11 11 0 0 0&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span> <span class="o">=</span> <span class="n">Driver</span><span class="p">(</span><span class="n">qe_options</span><span class="o">=</span><span class="n">qe_options</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="s1">&#39;tmp.out&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span><span class="o">.</span><span class="n">calc_energy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-132.2817713943313
+</pre></div></div>
+</div>
+<section id="Collect-the-electron-density-for-comparison">
+<h2>Collect the electron density for comparison<a class="headerlink" href="#Collect-the-electron-density-for-comparison" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>First retrieve the Quantum ESPRESSO density as a Fortran-ordered numpy array.</p></li>
+<li><p>Then transform it into a DFTpy <code class="docutils literal notranslate"><span class="pre">DirectField</span></code> which is a class to handle real-space grid functions.</p></li>
+<li><p>Write the density onto a <code class="docutils literal notranslate"><span class="pre">snpy</span></code> or <code class="docutils literal notranslate"><span class="pre">xsf</span></code> file.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">density</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">get_density</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rho_ks</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">data2field</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+<span class="n">ions</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">get_dftpy_ions</span><span class="p">()</span>
+<span class="n">rho_ks</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;../DATA/rho_target.xsf&#39;</span><span class="p">,</span> <span class="n">ions</span><span class="o">=</span><span class="n">ions</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="DFTpy:-optimize-the-LPP">
+<h1>DFTpy: optimize the LPP<a class="headerlink" href="#DFTpy:-optimize-the-LPP" title="Link to this heading">¶</a></h1>
+<p>In this section we will build a smooth Local pseudopotential with DFTpy modules</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.ions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">DirectField</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">DirectGrid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.functional</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalPseudo</span><span class="p">,</span> <span class="n">Functional</span><span class="p">,</span> <span class="n">TotalFunctional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.formats</span><span class="w"> </span><span class="kn">import</span> <span class="n">io</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.optimization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimization</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.mpi</span><span class="w"> </span><span class="kn">import</span> <span class="n">sprint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.functional.pseudo.psp</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">environ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
+</pre></div>
+</div>
+</div>
+<p>We load the same PP as the KS calculation. We will optimize the LPP to reproduce the KS density</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ions</span><span class="p">,</span> <span class="n">rho_target</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_all</span><span class="p">(</span><span class="s1">&#39;../DATA/rho_target.xsf&#39;</span><span class="p">)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">rho_target</span><span class="o">.</span><span class="n">grid</span>
+<span class="n">PP_list</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Au&#39;</span><span class="p">:</span> <span class="s1">&#39;../DATA/au_lda_v1.uspp.F.UPF&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MaxPoints</span><span class="o">=</span><span class="mi">1000</span> <span class="c1"># number of points in the one-dimensional PP function</span>
+<span class="n">PSEUDO</span> <span class="o">=</span> <span class="n">LocalPseudo</span><span class="p">(</span><span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="p">,</span> <span class="n">ions</span><span class="o">=</span><span class="n">ions</span><span class="p">,</span> <span class="n">PP_list</span><span class="o">=</span><span class="n">PP_list</span><span class="p">,</span> <span class="n">MaxPoints</span><span class="o">=</span><span class="n">MaxPoints</span><span class="p">)</span>
+<span class="n">rho_ini</span> <span class="o">=</span> <span class="n">rho_target</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+setting key: Au -&gt; ../DATA/au_lda_v1.uspp.F.UPF
+</pre></div></div>
+</div>
+<section id="Load-the-needed-density-functionals">
+<h2>Load the needed density functionals<a class="headerlink" href="#Load-the-needed-density-functionals" title="Link to this heading">¶</a></h2>
+<p>Here we use TF + 0.2 vW, however you can choose any functional. We find the LPPs from TF+0.2vW to be transferable for use with other functionals</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">KE</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;KEDF&#39;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;TFvW&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">XC</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;XC&#39;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;LDA&#39;</span><span class="p">,</span> <span class="n">libxc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">HARTREE</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;HARTREE&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-the-total-energy-functional">
+<h2>Define the total energy functional<a class="headerlink" href="#Define-the-total-energy-functional" title="Link to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">TotalFunctional</span><span class="p">(</span><span class="n">KE</span><span class="o">=</span><span class="n">KE</span><span class="p">,</span> <span class="n">XC</span><span class="o">=</span><span class="n">XC</span><span class="p">,</span> <span class="n">HARTREE</span><span class="o">=</span><span class="n">HARTREE</span><span class="p">,</span> <span class="n">PSEUDO</span><span class="o">=</span><span class="n">PSEUDO</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Optimize-the-electron-density-with-DFTpy">
+<h2>Optimize the electron density with DFTpy<a class="headerlink" href="#Optimize-the-electron-density-with-DFTpy" title="Link to this heading">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimization_options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;econv&#39;</span> <span class="p">:</span> <span class="mf">1e-6</span><span class="o">*</span><span class="n">ions</span><span class="o">.</span><span class="n">nat</span><span class="p">}</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">Optimization</span><span class="p">(</span><span class="n">EnergyEvaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">,</span> <span class="n">optimization_options</span> <span class="o">=</span> <span class="n">optimization_options</span><span class="p">,</span> <span class="n">optimization_method</span> <span class="o">=</span> <span class="s1">&#39;TN&#39;</span><span class="p">)</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">optimize_rho</span><span class="p">(</span><span class="n">guess_rho</span><span class="o">=</span><span class="n">rho_ini</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Step    Energy(a.u.)            dE              dP              Nd      Nls     Time(s)
+0       -2.829202916983E+01     -2.829203E+01   1.071715E+01    1       1       1.508641E-02
+!WARN : pAp small than zero :iter =  2 -13869586.071581276
+1       -3.026431867579E+01     -1.972290E+00   1.898336E+00    3       2       4.524398E-02
+2       -3.053032393062E+01     -2.660053E-01   1.792215E-01    9       1       9.649873E-02
+3       -3.054163434346E+01     -1.131041E-02   9.136675E-03    6       1       1.294124E-01
+4       -3.054206924089E+01     -4.348974E-04   7.360995E-04    7       1       1.677411E-01
+5       -3.054214000359E+01     -7.076270E-05   5.784101E-05    11      1       2.224207E-01
+6       -3.054214279047E+01     -2.786887E-06   3.930147E-06    8       1       2.638590E-01
+7       -3.054214313039E+01     -3.399122E-07   3.422536E-07    11      1       3.183517E-01
+8       -3.054214314688E+01     -1.649943E-08   1.956503E-08    8       1       3.602667E-01
+#### Density Optimization Converged ####
+Chemical potential (a.u.): 0.9621991736199328
+Chemical potential (eV)  : 26.18277314569915
+</pre></div></div>
+</div>
+<p>The density obtained is from the local part of the GBRV PP and thus it is far from the KS density</p>
+<section id="LPP-optimization">
+<h3>LPP optimization<a class="headerlink" href="#LPP-optimization" title="Link to this heading">¶</a></h3>
+<p>The delta_pp function is a polynomial which coefficients {a} are optimized to reproduce the KS electron density.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">delta_pp</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">rcut</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">rcut</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">rcut</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">rcut</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">rcut</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">b</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">4</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">5</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">r</span><span class="o">&gt;</span><span class="n">rcut</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">v</span>
+</pre></div>
+</div>
+</div>
+<p>The following function represents the new tunable short range PP on the simulation grid</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lpp2vloc</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">ions</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">zval</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">PSP</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">_zval</span> <span class="o">=</span> <span class="n">zval</span>
+    <span class="n">pseudo</span> <span class="o">=</span> <span class="n">LocalPseudo</span><span class="p">(</span><span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="p">,</span> <span class="n">ions</span><span class="o">=</span><span class="n">ions</span><span class="p">,</span> <span class="n">PP_list</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Au&#39;</span><span class="p">:</span><span class="n">engine</span><span class="p">},</span> <span class="n">MaxPoints</span><span class="o">=</span><span class="n">MaxPoints</span><span class="p">)</span>
+    <span class="n">pseudo</span><span class="o">.</span><span class="n">local_PP</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pseudo</span><span class="o">.</span><span class="n">_vreal</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="n">rho_target</span><span class="o">.</span><span class="n">grid</span>
+<span class="n">rcut</span> <span class="o">=</span> <span class="mf">2.35</span> <span class="c1"># Taken from the GBRV PP cutoff radius</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rcut</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ext</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;EXT&#39;</span><span class="p">)</span>
+<span class="n">evaluator</span><span class="o">.</span><span class="n">UpdateFunctional</span><span class="p">(</span><span class="n">newFuncDict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;EXT&#39;</span><span class="p">:</span> <span class="n">ext</span><span class="p">})</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">Optimization</span><span class="p">(</span><span class="n">EnergyEvaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">)</span>
+
+<span class="n">rho_ini</span> <span class="o">=</span> <span class="n">rho_target</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LOGLEVEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delta_rho</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">delta_pp</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">rcut</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">ext</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">lpp2vloc</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">ions</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">optimize_rho</span><span class="p">(</span><span class="n">guess_rho</span><span class="o">=</span><span class="n">rho_ini</span><span class="p">)</span>
+    <span class="n">rho_ini</span><span class="p">[:]</span><span class="o">=</span><span class="n">rho</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rho</span> <span class="o">-</span> <span class="n">rho_target</span><span class="p">))</span><span class="o">.</span><span class="n">integral</span><span class="p">()</span>
+    <span class="c1"># print(&#39;aa:&#39;, a, diff)</span>
+    <span class="k">return</span> <span class="n">diff</span>
+</pre></div>
+</div>
+</div>
+<p>Once callable functions are defined we can optimize</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">delta_rho</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Powell&#39;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ftol&#39;</span><span class="p">:</span> <span class="mf">1.0e-4</span><span class="p">})</span>
+<span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LOGLEVEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
+<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;Au&#39;</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">PSEUDO</span><span class="o">.</span><span class="n">readpp</span><span class="o">.</span><span class="n">pp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">r</span>
+<span class="n">vl</span> <span class="o">=</span> <span class="n">PSEUDO</span><span class="o">.</span><span class="n">readpp</span><span class="o">.</span><span class="n">pp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">v</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">delta_pp</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">rcut</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">+=</span> <span class="n">vl</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">PSP</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;atomicnum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">79</span> <span class="c1"># From GBRV PP</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">_zval</span> <span class="o">=</span> <span class="mf">11.0</span> <span class="c1"># From GBRV PP</span>
+</pre></div>
+</div>
+</div>
+<p>Visualize the Local pseudopotentials and the electron density</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;New LPP&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">vl</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original LPP&#39;</span><span class="p">)</span>
+<span class="n">rcut</span> <span class="o">=</span> <span class="n">rcut</span>
+<span class="n">r1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">rcut</span><span class="p">,</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span><span class="n">delta_pp</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span><span class="n">rcut</span><span class="p">,</span><span class="n">a</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$v_</span><span class="si">{LPP}</span><span class="s1">(r)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Local part of PP of Au&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;v(r)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f21d78eafe0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_jupyter_lpps_34_1.png" src="../../_images/tutorials_jupyter_lpps_34_1.png" />
+</div>
+</div>
+<p>Saving as a psp8 PP</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Au_pgbrv02.psp8&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Pavanello Research Group.
+      <span class="lastupdated">Last updated on Thursday, 24 Jul 2025 14:03:30.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

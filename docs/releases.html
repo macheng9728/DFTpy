@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stable releases &mdash; DFTpy 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/dftpy.ico"/>
+      <script src="_static/documentation_options.js?v=51b770b3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How does DFTpy work?" href="ofdft.html" />
+    <link rel="prev" title="Use of Propagator" href="tutorials/tddft/propagate.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DFTpy
+              <img src="_static/dftpy.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contacts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Stable releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-2-0-0">Version 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-0-0">Version 1.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ofdft.html">How does DFTpy work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LPP.html">Local Pseudopotentials (LPPs) for OF-DFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DFTpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Stable releases</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/pavanello-research-group/dftpy/tree/master/doc/releases.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="tutorials/tddft/propagate.html" class="btn btn-neutral float-left" title="Use of Propagator" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ofdft.html" class="btn btn-neutral float-right" title="How does DFTpy work?" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="stable-releases">
+<h1>Stable releases<a class="headerlink" href="#stable-releases" title="Link to this heading">¶</a></h1>
+<section id="version-2-0-0">
+<h2>Version 2.0.0<a class="headerlink" href="#version-2-0-0" title="Link to this heading">¶</a></h2>
+<p>Release date: <a class="reference external" href="https://gitlab.com/pavanello-research-group/dftpy/-/releases/v2.0.0">May 2022</a></p>
+<dl class="simple">
+<dt>This version supports:</dt><dd><ul class="simple">
+<li><p>The Ions object is inherit from <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/atoms.html">ASE.atoms</a></p></li>
+<li><p>Parallel implementation with <a class="reference external" href="https://mpi4py.readthedocs.io/en/stable/">mpi4py</a></p></li>
+<li><p>Supported spin polarized runs</p></li>
+<li><p>New td-OF-DFT code for real-time propagation and Casida</p></li>
+<li><p>Nonadiabatic Pauli potential with the <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.104.235110">JP</a> functional</p></li>
+<li><p>Supported non-standard semilocal kinetic functionals , such as <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.98.041111">LKT</a> and <a class="reference external" href="https://pubs.acs.org/doi/full/10.1021/acs.jpclett.8b01926">PG</a></p></li>
+<li><p>Meta-GGA functional</p></li>
+<li><p>Non-local exchange-correlation functional (rVV10)</p></li>
+<li><p>One-orbital ensemble self-consistent field (OE-SCF) solver</p></li>
+<li><p>Initial density generator</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="version-1-0-0">
+<h2>Version 1.0.0<a class="headerlink" href="#version-1-0-0" title="Link to this heading">¶</a></h2>
+<p>Release date: <a class="reference external" href="https://gitlab.com/pavanello-research-group/dftpy/-/releases/dftpy-1.0">January 2020</a></p>
+<dl class="simple">
+<dt>This version supports:</dt><dd><ul class="simple">
+<li><p>OFDFT electron density optimization</p></li>
+<li><p>Latest nonlocal KEDFs</p></li>
+<li><p>Ab initio dynamics</p></li>
+<li><p>Hydrodynamic DFT (TD-OFDFT)</p></li>
+<li><p>I/O for plotting and to several file formats</p></li>
+<li><p>Several examples (also on Jupyter notebooks)</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorials/tddft/propagate.html" class="btn btn-neutral float-left" title="Use of Propagator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ofdft.html" class="btn btn-neutral float-right" title="How does DFTpy work?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Pavanello Research Group.
+      <span class="lastupdated">Last updated on Thursday, 24 Jul 2025 14:03:30.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

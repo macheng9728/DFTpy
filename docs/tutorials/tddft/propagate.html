@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use of Propagator &mdash; DFTpy 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/dftpy.ico"/>
+      <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Stable releases" href="../../releases.html" />
+    <link rel="prev" title="Molecular Dynamics Simulation" href="../ofdft/md.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DFTpy
+              <img src="../../_static/dftpy.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contacts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#config-of-dftpy-script">Config of DFTpy script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#ofdft">OFDFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#local-pseudopotentials">Local Pseudopotentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#spin-unrestricted-calculation">Spin unrestricted calculation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#tddft">TDDFT</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Use of Propagator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#do-it-on-a-jupyter-notebook">Do it on a Jupyter Notebook!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Stable releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ofdft.html">How does DFTpy work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LPP.html">Local Pseudopotentials (LPPs) for OF-DFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DFTpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Use of Propagator</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=../../genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/pavanello-research-group/dftpy/tree/master/doc/tutorials/tddft/propagate.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../ofdft/md.html" class="btn btn-neutral float-left" title="Molecular Dynamics Simulation" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../releases.html" class="btn btn-neutral float-right" title="Stable releases" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="use-of-propagator">
+<span id="propagate"></span><h1>Use of Propagator<a class="headerlink" href="#use-of-propagator" title="Link to this heading">¶</a></h1>
+<p>Here we provide an example of calculating the dipole moments using OF-TDDFT with the config files.</p>
+<p>Suppose we have a GaAs cluster with its density optimized to the ground state. At t=0 we apply a kick at x-direction and
+we want to calculate the dipole moment of the cluster at t=0.1 a.u.</p>
+<p>The first step is to optimize the ground state density. We create a config file named optimize.ini:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">JOB</span><span class="p">]</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">Optdensity</span>
+
+<span class="p">[</span><span class="n">PATH</span><span class="p">]</span>
+<span class="n">pppath</span> <span class="o">=</span> <span class="o">../</span><span class="n">DATA</span><span class="o">/</span>
+<span class="n">cellpath</span> <span class="o">=</span> <span class="o">../</span><span class="n">DATA</span><span class="o">/</span>
+
+<span class="p">[</span><span class="n">PP</span><span class="p">]</span>
+<span class="n">Ga</span> <span class="o">=</span> <span class="n">Ga_lda</span><span class="o">.</span><span class="n">oe04</span><span class="o">.</span><span class="n">recpot</span>
+<span class="n">As</span> <span class="o">=</span> <span class="n">As_lda</span><span class="o">.</span><span class="n">oe04</span><span class="o">.</span><span class="n">recpot</span>
+
+<span class="p">[</span><span class="n">CELL</span><span class="p">]</span>
+<span class="n">cellfile</span> <span class="o">=</span> <span class="n">GaAs_random</span><span class="o">.</span><span class="n">vasp</span>
+<span class="n">elename</span> <span class="o">=</span> <span class="n">Ga</span> <span class="n">As</span>
+<span class="n">zval</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="mf">5.0</span>
+<span class="nb">format</span> <span class="o">=</span> <span class="n">vasp</span>
+
+<span class="p">[</span><span class="n">GRID</span><span class="p">]</span>
+<span class="n">spacing</span> <span class="o">=</span> <span class="mf">0.25</span>
+
+<span class="p">[</span><span class="n">DENSITY</span><span class="p">]</span>
+<span class="n">densityini</span> <span class="o">=</span> <span class="n">HEG</span>
+<span class="n">densityoutput</span> <span class="o">=</span> <span class="n">density</span>
+
+<span class="p">[</span><span class="n">EXC</span><span class="p">]</span>
+<span class="n">xc</span> <span class="o">=</span> <span class="n">LDA</span>
+
+<span class="p">[</span><span class="n">KEDF</span><span class="p">]</span>
+<span class="n">kedf</span> <span class="o">=</span> <span class="n">x_TF_y_vW</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="p">[</span><span class="n">OPT</span><span class="p">]</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">TN</span>
+<span class="n">c1</span> <span class="o">=</span> <span class="mf">1e-4</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="mf">2e-1</span>
+<span class="n">maxls</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">maxiter</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">maxfun</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">econv</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="n">h0</span> <span class="o">=</span> <span class="mf">0.025</span>
+</pre></div>
+</div>
+<p>Then we run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>dftpy<span class="w"> </span>optimize.ini
+</pre></div>
+</div>
+<p>which will generate a density file names density in the working directory.</p>
+<p>The next step is to run the propagation. We create another config file named propagate.ini:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>JOB<span class="o">]</span>
+<span class="nv">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>Propagate
+
+<span class="o">[</span>PATH<span class="o">]</span>
+<span class="nv">pppath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>../DATA/
+<span class="nv">cellpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>../DATA/
+
+<span class="o">[</span>PP<span class="o">]</span>
+<span class="nv">Ga</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>Ga_lda.oe04.recpot
+<span class="nv">As</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>As_lda.oe04.recpot
+
+<span class="o">[</span>CELL<span class="o">]</span>
+<span class="nv">cellfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>GaAs_random.vasp
+<span class="nv">elename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>Ga<span class="w"> </span>As
+<span class="nv">zval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span>.0<span class="w"> </span><span class="m">5</span>.0
+<span class="nv">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>vasp
+
+<span class="o">[</span>GRID<span class="o">]</span>
+<span class="nv">spacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>.25
+<span class="nv">gfull</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>True
+
+<span class="o">[</span>DENSITY<span class="o">]</span>
+<span class="nv">densityini</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>Read
+<span class="nv">densityfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>density
+
+<span class="o">[</span>EXC<span class="o">]</span>
+<span class="nv">xc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>LDA
+
+<span class="o">[</span>KEDF<span class="o">]</span>
+<span class="p">;</span><span class="w"> </span>Pauli<span class="w"> </span>KEDF
+<span class="nv">kedf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>TF
+
+<span class="o">[</span>PROPAGAROR<span class="o">]</span>
+<span class="nb">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>crank-nicolson
+<span class="nv">int_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>.0e-3
+<span class="nv">linearsolver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>bicgstab
+<span class="nv">tol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>.0e-10
+<span class="nv">maxiter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span>
+
+<span class="o">[</span>TD<span class="o">]</span>
+<span class="nv">outfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>td_out
+<span class="nv">tmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>.1
+<span class="nv">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span>
+<span class="nv">direct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>x
+<span class="nv">strength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>.0e-3
+</pre></div>
+</div>
+<p>One thing to keep in mind is when running the propagate job, the kedf is the Pauli KEDF (i.e. total KESF minus the von
+Weizsacker term).</p>
+<p>Then we run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>dftpy<span class="w"> </span>propagate.ini
+</pre></div>
+</div>
+<p>It will generate three files: td_out_E, td_out_mu, td_out_j, which contains the energy of the electrons, the dipole
+moment, and the integrated current of each time step, respectively.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../ofdft/md.html" class="btn btn-neutral float-left" title="Molecular Dynamics Simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../releases.html" class="btn btn-neutral float-right" title="Stable releases" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Pavanello Research Group.
+      <span class="lastupdated">Last updated on Thursday, 24 Jul 2025 14:03:30.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

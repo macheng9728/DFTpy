@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How does DFTpy work? &mdash; DFTpy 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/dftpy.ico"/>
+      <script src="_static/documentation_options.js?v=51b770b3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Local Pseudopotentials (LPPs) for OF-DFT" href="LPP.html" />
+    <link rel="prev" title="Stable releases" href="releases.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DFTpy
+              <img src="_static/dftpy.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contacts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Stable releases</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How does DFTpy work?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#orbital-free-dft">Orbital-Free DFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#time-dependent-orbital-free-dft">Time-Dependent Orbital-Free DFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#short-note-on-the-implementation">Short note on the implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LPP.html">Local Pseudopotentials (LPPs) for OF-DFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DFTpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How does DFTpy work?</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/pavanello-research-group/dftpy/tree/master/doc/ofdft.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="releases.html" class="btn btn-neutral float-left" title="Stable releases" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="LPP.html" class="btn btn-neutral float-right" title="Local Pseudopotentials (LPPs) for OF-DFT" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-does-dftpy-work">
+<span id="ofdft"></span><h1>How does DFTpy work?<a class="headerlink" href="#how-does-dftpy-work" title="Link to this heading">¶</a></h1>
+<section id="orbital-free-dft">
+<h2>Orbital-Free DFT<a class="headerlink" href="#orbital-free-dft" title="Link to this heading">¶</a></h2>
+<p>In OF-DFT, the ground state electron density, <span class="math notranslate nohighlight">\(n_0(\mathbf{r})\)</span>, is obtained from the direct minimization of the ground state energy density functional, <span class="math notranslate nohighlight">\(E[n]\)</span>. Namely,</p>
+<div class="math notranslate nohighlight">
+\[n_0 = \text{argmin}_n \left[ E[n] - \mu \left( \int n(\mathbf{r}) d\mathbf{r} - N \right) \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(N\)</span> is the number of valence electrons in the system. Both <span class="math notranslate nohighlight">\(n_0(\mathbf{r})\)</span> and  <span class="math notranslate nohighlight">\(\mu\)</span> are determined during the minimization. The ground state energy is, <span class="math notranslate nohighlight">\(E_0 = E[n_0]\)</span>.</p>
+<p>In practice, the above minimization can only be carried out if the ground state energy functional is known as a pure functional of the density. The energy functional is a sum of several terms:</p>
+<div class="math notranslate nohighlight">
+\[E[n]=T_s[n]+E_H[n]+E_{xc}[n]+\int v_{ext}(\mathbf{r}) n(\mathbf{r}) d\mathbf{r}\]</div>
+<p>where</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T_s[n]\)</span>: noninteracting kinetic energy or KEDF.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_{xc}[n]\)</span>: exchange-correlation energy or EXC.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_{H}[n]=\frac{1}{2}\int \frac{n(\mathbf{r})n(\mathbf{r}^\prime)}{|\mathbf{r}-\mathbf{r}^\prime|}d\mathbf{r} d\mathbf{r}^\prime\)</span>: Hartree energy.</p></li>
+<li><p><span class="math notranslate nohighlight">\(v_{ext}(\mathbf{r})\)</span>: the external potential (typically the electron-ion interaction).</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In DFTpy, <span class="math notranslate nohighlight">\(T_s[n]\)</span> and <span class="math notranslate nohighlight">\(E_{xc}[n]\)</span> are pure functionals of the density. Check out the tutorials for a list of available <a class="reference external" href="tutorials/config.html#kedf">KEDF</a> and <a class="reference external" href="tutorials/config.html#exc">EXC</a> functionals,</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>DFTpy solves the ground state problem with the so-called <cite>direct energy minimization</cite>. Other (faster) methods are available, such as <a class="reference external" href="https://pubs.acs.org/doi/abs/10.1021/acs.jpclett.1c00716">OESCF</a>, which is implemented in <a class="reference external" href="http://edftpy.rutgers.edu">eDFTpy</a>. <a class="reference external" href="https://pubs.acs.org/doi/abs/10.1021/acs.jpclett.1c00716">OESCF</a> may be implemented in DFTpy upon request.</p>
+</div>
+</section>
+<section id="time-dependent-orbital-free-dft">
+<h2>Time-Dependent Orbital-Free DFT<a class="headerlink" href="#time-dependent-orbital-free-dft" title="Link to this heading">¶</a></h2>
+<p>DFTpy can also describe systems out of equilibrium by propagating them in <a class="reference external" href="https://wires.onlinelibrary.wiley.com/doi/abs/10.1002/wcms.1482">real time</a> as well as in <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.103.245102">frequency space</a> finding the roots of the frequency dependent polarizability (Casida). Because of the OF-DFT foundation, DFTpy implements the so-called time-dependent orbital-free DFT (td-OF-DFT) approach whereby a single Bosonic wavefunction, <span class="math notranslate nohighlight">\(\Psi(\mathbf{r},t)\)</span> is propagated with a time-dependent KS-like Hamiltonian. Namely,</p>
+<div class="math notranslate nohighlight">
+\[\hat{H}(t)  \Psi(\mathbf{r},t) = i \frac{d}{dt}\Psi(\mathbf{r},t)\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\hat{H}(t) = -\frac{1}{2} \nabla^2 + v_B(\mathbf{r},t).\]</div>
+<p>The Bosonic KS-like potential is given by two major contributions</p>
+<div class="math notranslate nohighlight">
+\[v_B(\mathbf{r},t) = v_s(\mathbf{r},t) + v_P(\mathbf{r},t)\]</div>
+<p>where <span class="math notranslate nohighlight">\(v_s(\mathbf{r},t)=v_{ext}(\mathbf{r},t)+v_H[n(t)](\mathbf{r},t)+v_{xc}[n(t)](\mathbf{r},t)\)</span> where the adiabatic approximation has been invoked. The <cite>Pauli</cite> potential is given by adiabatic and nonadiabatic contributions,</p>
+<div class="math notranslate nohighlight">
+\[v_P(\mathbf{r},t)=v_P^{ad}(\mathbf{r},t)+v_P^{nad}(\mathbf{r},t).\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The adiabatic Pauli potential can be specified according to any given <a class="reference external" href="tutorials/config.html#kedf">KEDF</a> available in DFTpy.</p>
+</div>
+<p>The nonadiabatic contribution is usually neglected in the litarature. In DFTpy the <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.104.235110">JP</a> functional is available,</p>
+<div class="math notranslate nohighlight">
+\[v_P^{nad}(\mathbf{r},t) = -\frac{\pi^3}{12}\left(\frac{6}{k_F^2(\mathbf{r},t)}\mathcal{F}^{-1}\left\{i\mathbf{q}\cdot\mathbf{j}(\mathbf{q},t)\frac{1}{q}\right\}+\frac{1}{k_F^4(\mathbf{r},t)}\mathcal{F}^{-1}\left\{i\mathbf{q}\cdot\mathbf{j}(\mathbf{q},t)q\right\}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{j}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{q}\)</span> are the electronic current density and the reciprocal space vector, respectively. The current density is determined by the standard equation <span class="math notranslate nohighlight">\(\mathbf{j}(\mathbf{r})=\frac{1}{2i}\left[\Psi^*(\mathbf{r})\nabla\Psi(\mathbf{r})-\Psi(\mathbf{r})\nabla\Psi^*(\mathbf{r})\right]\)</span>.  <span class="math notranslate nohighlight">\(\mathcal{F}\)</span> stands for Fourier transform and <span class="math notranslate nohighlight">\(k_F(\mathbf{r},t)=[3\pi^2 n(\mathbf{r},t)]^{1/3}\)</span> is the Fermi wavevector function of the local electron density.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The JP potential is numerically challenging. Refer to the original <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.104.235110">JP</a> publication for details.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Optical spectra and nonlinear electronic processes can be modelled by DFTpy. See tutorials for additional information. Ehrenfest dynamics is not yet available.</p>
+</div>
+</section>
+<section id="short-note-on-the-implementation">
+<h2>Short note on the implementation<a class="headerlink" href="#short-note-on-the-implementation" title="Link to this heading">¶</a></h2>
+<p>In DFTpy, the electron density is represented in a discrete set of points given by a Cartesian <cite>grid</cite> and contained in a simulation <cite>cell</cite> that is specified by 3 <cite>lattice vectors</cite>. The number of grid points and the cell size are regulated by the user. The Cartesian grid allows for an efficient parallelization of data and work (we use <cite>mpi4py</cite>), and for the exploitation of Fast Fourier Transforms for solving convolution integrals (such as the one needed to compute <span class="math notranslate nohighlight">\(E_H[n]\)</span>). Either <cite>NumPy.fft</cite> or <cite>PyFFT</cite> are used depending on user input.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wires.onlinelibrary.wiley.com/doi/abs/10.1002/wcms.1482">DFTpy release paper (ground state and td-OF-DFT)</a></p></li>
+<li><p><a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.103.245102">DFTpy td-OF-DFT (Casida)</a></p></li>
+<li><p><a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.104.235110">DFTpy td-OF-DFT (JP nonadiabatic Pauli potential)</a></p></li>
+<li><p><a class="reference external" href="https://pubs.acs.org/doi/abs/10.1021/acs.jpclett.1c00716">OESCF solver for OF-DFT</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="releases.html" class="btn btn-neutral float-left" title="Stable releases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="LPP.html" class="btn btn-neutral float-right" title="Local Pseudopotentials (LPPs) for OF-DFT" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Pavanello Research Group.
+      <span class="lastupdated">Last updated on Thursday, 24 Jul 2025 14:03:30.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

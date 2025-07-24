@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TD-OFDFT Tutorials &mdash; DFTpy 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+    <link rel="shortcut icon" href="../../_static/dftpy.ico"/>
+      <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DFTpy
+              <img src="../../_static/dftpy.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contacts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Stable releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ofdft.html">How does DFTpy work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LPP.html">Local Pseudopotentials (LPPs) for OF-DFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DFTpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TD-OFDFT Tutorials</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=../../genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/pavanello-research-group/dftpy/tree/master/doc/tutorials/jupyter/td-ofdft-tutorial.ipynb">Source</a>
+          
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="TD-OFDFT-Tutorials">
+<h1>TD-OFDFT Tutorials<a class="headerlink" href="#TD-OFDFT-Tutorials" title="Link to this heading">¶</a></h1>
+<p>This is the first tutorial in running TD-OFDFT with DFTpy. In this tutorial, you will learn:</p>
+<ul class="simple">
+<li><p>How to run an TD-OFDFT calculation starting from the ground-state density</p></li>
+<li><p>How to use the Dynamics class to write a real-time propagation runner</p></li>
+<li><p>How to use predictor-correctors</p></li>
+<li><p>How to add the nonadiabatic functional as a correction</p></li>
+<li><p>How to run an TD-OFDFT calculation starting from the ground-state density from a more accurate functional</p></li>
+</ul>
+<section id="A-simple-example-using-adiabatic-TFW-functional">
+<h2>A simple example using adiabatic TFW functional<a class="headerlink" href="#A-simple-example-using-adiabatic-TFW-functional" title="Link to this heading">¶</a></h2>
+<p>First we need to load the necessary modules</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">DirectGrid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">DirectField</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.functional</span><span class="w"> </span><span class="kn">import</span> <span class="n">Functional</span><span class="p">,</span> <span class="n">TotalFunctional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.optimization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimization</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEN_CONV</span><span class="p">,</span> <span class="n">ENERGY_CONV</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.formats.vasp</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_POSCAR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.td.propagator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Propagator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.td.hamiltonian</span><span class="w"> </span><span class="kn">import</span> <span class="n">Hamiltonian</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_rho</span><span class="p">,</span> <span class="n">calc_j</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.td.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">initial_kick</span>
+</pre></div>
+</div>
+</div>
+<p>The next step is to prepare the structure of the system. We load the system structure from a vasp POSCAR file and set the grid size to 36 by 36 by 32. We then initialized the density to be uniform electron gas.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA</span><span class="o">=</span><span class="s1">&#39;../DATA/&#39;</span>
+<span class="n">structure_file</span> <span class="o">=</span> <span class="n">DATA</span><span class="o">+</span><span class="s1">&#39;Mg8.vasp&#39;</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">read_POSCAR</span><span class="p">(</span><span class="n">structure_file</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Mg&#39;</span><span class="p">])</span>
+<span class="n">PP_list</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Mg&#39;</span><span class="p">:</span><span class="n">DATA</span><span class="o">+</span><span class="s1">&#39;Mg_OEPP_PZ.UPF&#39;</span><span class="p">}</span>
+<span class="n">nr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">36</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">DirectGrid</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">nr</span><span class="p">)</span>
+<span class="n">nelec</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">rho_ini</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nr</span><span class="p">)</span>
+<span class="n">rho_ini</span> <span class="o">=</span> <span class="n">DirectField</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">griddata_3d</span><span class="o">=</span><span class="n">rho_ini</span><span class="p">)</span>
+<span class="n">rho_ini</span> <span class="o">=</span> <span class="n">rho_ini</span> <span class="o">/</span> <span class="n">rho_ini</span><span class="o">.</span><span class="n">integral</span><span class="p">()</span> <span class="o">*</span> <span class="n">nelec</span>
+</pre></div>
+</div>
+</div>
+<p>Next, we set up the functionals,</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ke</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;KEDF&#39;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;TFvW&#39;</span><span class="p">)</span>
+<span class="n">xc</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;XC&#39;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;LDA&#39;</span><span class="p">)</span>
+<span class="n">hartree</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;HARTREE&#39;</span><span class="p">)</span>
+<span class="n">pseudo</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;PSEUDO&#39;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">ions</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">PP_list</span><span class="o">=</span><span class="n">PP_list</span><span class="p">)</span>
+<span class="n">totalfunctional</span> <span class="o">=</span> <span class="n">TotalFunctional</span><span class="p">(</span><span class="n">KineticEnergyFunctional</span><span class="o">=</span><span class="n">ke</span><span class="p">,</span>
+                                <span class="n">XCFunctional</span><span class="o">=</span><span class="n">xc</span><span class="p">,</span>
+                                <span class="n">HARTREE</span><span class="o">=</span><span class="n">hartree</span><span class="p">,</span>
+                                <span class="n">PSEUDO</span><span class="o">=</span><span class="n">pseudo</span>
+                                 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+setting key: Mg -&gt; ../DATA/Mg_OEPP_PZ.UPF
+</pre></div></div>
+</div>
+<p>and the optimizer</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimization_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;econv&#39;</span> <span class="p">:</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">nelec</span><span class="p">,</span> <span class="c1"># Energy Convergence (a.u./atom)</span>
+        <span class="s1">&#39;maxfun&#39;</span> <span class="p">:</span> <span class="mi">50</span><span class="p">,</span>   <span class="c1"># For TN method, it&#39;s the max steps for searching direction</span>
+        <span class="s1">&#39;maxiter&#39;</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="c1"># The max steps for optimization</span>
+        <span class="p">}</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">Optimization</span><span class="p">(</span><span class="n">EnergyEvaluator</span><span class="o">=</span><span class="n">totalfunctional</span><span class="p">,</span> <span class="n">optimization_options</span> <span class="o">=</span> <span class="n">optimization_options</span><span class="p">,</span>
+        <span class="n">optimization_method</span> <span class="o">=</span> <span class="s1">&#39;TN&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We optimize the ground state density.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rho0</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">optimize_rho</span><span class="p">(</span><span class="n">guess_rho</span><span class="o">=</span><span class="n">rho_ini</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Step    Energy(a.u.)            dE              dP              Nd      Nls     Time(s)
+0       8.951916882520E+00      8.951917E+00    2.343046E+00    1       1       1.020412E-01
+!WARN: Change to steepest decent
+1       -4.969090300003E+00     -1.392101E+01   1.122103E+00    1       4       2.105329E-01
+2       -5.991150585474E+00     -1.022060E+00   1.518278E-01    4       2       3.244281E-01
+3       -6.136119767348E+00     -1.449692E-01   1.739026E-02    9       1       4.740286E-01
+4       -6.144712257363E+00     -8.592490E-03   1.159538E-03    5       1       5.816903E-01
+5       -6.146210667257E+00     -1.498410E-03   1.868759E-04    9       2       7.452078E-01
+6       -6.146462118087E+00     -2.514508E-04   3.070860E-05    10      2       9.106135E-01
+7       -6.146493981960E+00     -3.186387E-05   5.229644E-06    8       2       1.062829E+00
+8       -6.146501135249E+00     -7.153290E-06   8.488459E-07    10      2       1.225876E+00
+9       -6.146502111559E+00     -9.763098E-07   1.526287E-07    8       2       1.371650E+00
+10      -6.146502324696E+00     -2.131374E-07   2.676235E-08    10      2       1.539230E+00
+11      -6.146502354749E+00     -3.005262E-08   4.490378E-09    8       2       1.689223E+00
+12      -6.146502361125E+00     -6.375506E-09   7.638532E-10    10      2       1.857856E+00
+13      -6.146502361992E+00     -8.677130E-10   1.422378E-10    9       2       2.013226E+00
+14      -6.146502362149E+00     -1.563834E-10   5.781176E-11    11      2       2.189591E+00
+#### Density Optimization Converged ####
+Chemical potential (a.u.): -0.1288498639558141
+Chemical potential (eV)  : -3.5061830527358397
+</pre></div></div>
+</div>
+<p>Now come the TD part. The first thing we need to do is to change the KE functional in the total functional to Pauli functional, e.g., remove the von Weizacker part, because it’s handled by the Laplacian part of the Hamiltonian.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ke</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span> <span class="c1"># Kinetic energy functionals with the form xTF+yvW+something has the options x and y which controls how much TF or vW in the functional. Setting y=0 removes the vW part from the functional</span>
+</pre></div>
+</div>
+</div>
+<p>We then apply a kick on the ground state density, and prepare the Hamiltonian and the propagator.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 0, 1, 2 means x, y, z-direction, respectively</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mf">1.0e-1</span> <span class="c1"># kick_strength in a.u.</span>
+<span class="n">psi</span> <span class="o">=</span> <span class="n">initial_kick</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rho0</span><span class="p">))</span>
+<span class="n">j0</span> <span class="o">=</span> <span class="n">calc_j</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+<span class="n">potential</span> <span class="o">=</span> <span class="n">totalfunctional</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="n">j0</span><span class="p">,</span> <span class="n">calcType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">potential</span>
+<span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">Hamiltonian</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
+<span class="n">interval</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># time interval in a.u. Note this is a relatively large time step. In real calculations you typically want a smaller time step like 1e-1 or 1e-2.</span>
+<span class="n">prop</span> <span class="o">=</span> <span class="n">Propagator</span><span class="p">(</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;crank-nicholson&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now comes the actual propagation. The easiest way to run it is to use a for loop.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_steps</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="k">for</span> <span class="n">i_t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
+    <span class="n">psi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">prop</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">calc_rho</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">calc_j</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="n">potential</span> <span class="o">=</span> <span class="n">totalfunctional</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="n">calcType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">potential</span>
+    <span class="n">prop</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">potential</span>
+</pre></div>
+</div>
+</div>
+<p>We can check the observables, for example, the dipole moment, at the end of the propagation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_rho</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">-</span> <span class="n">rho0</span>
+<span class="n">delta_mu</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta_rho</span> <span class="o">*</span> <span class="n">delta_rho</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">integral</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">delta_mu</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ 3.09496657 -0.22498206 -0.24091788]
+</pre></div></div>
+</div>
+<p>Alternatively, we can make a class as a child class of Dynamics. This is a more object oriented way of running propagations and also allows us to attach any observation function to record whatever intermediate result we need at each time step.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dynamics</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Runner</span><span class="p">(</span><span class="n">Dynamics</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Runner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="o">=</span> <span class="n">max_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totalfunctional</span> <span class="o">=</span> <span class="n">totalfunctional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho0</span> <span class="o">=</span> <span class="n">rho0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="n">initial_kick</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">calc_j</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="n">potential</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">totalfunctional</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho0</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,</span> <span class="n">calcType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">potential</span>
+        <span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">Hamiltonian</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="n">Propagator</span><span class="p">(</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;crank-nicholson&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dipole</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calc_dipole</span><span class="p">)</span> <span class="c1"># this attaches the calc_dipole function to the observers list which runs after each time step.</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">calc_rho</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">calc_j</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="n">potential</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">totalfunctional</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,</span> <span class="n">calcType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">potential</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">potential</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">calc_dipole</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">delta_rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho0</span>
+        <span class="n">delta_mu</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta_rho</span> <span class="o">*</span> <span class="n">delta_rho</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">integral</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dipole</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delta_mu</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now that we made the class, we can create an instance of the class and run it.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">)</span>
+<span class="n">runner</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>We can plot how the dipole moment changes with time with matplotlib.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">interval</span> <span class="o">*</span> <span class="n">max_steps</span><span class="p">,</span> <span class="n">max_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner</span><span class="o">.</span><span class="n">dipole</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Dipole Moment (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_jupyter_td-ofdft-tutorial_25_0.png" src="../../_images/tutorials_jupyter_td-ofdft-tutorial_25_0.png" />
+</div>
+</div>
+</section>
+<section id="Introduction-of-the-predictor-corrector">
+<h2>Introduction of the predictor-corrector<a class="headerlink" href="#Introduction-of-the-predictor-corrector" title="Link to this heading">¶</a></h2>
+<p>A predictor-corrector can be used to greatly improve the accuracy of the propagation without the need of using a small time step. DFTpy offers a PredictorCorrector class. Here is an example how to use the PredictorCorrector class for real-time propagation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.td.predictor_corrector</span><span class="w"> </span><span class="kn">import</span> <span class="n">PredictorCorrector</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Runner2</span><span class="p">(</span><span class="n">Dynamics</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Runner2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="o">=</span> <span class="n">max_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">totalfunctional</span> <span class="o">=</span> <span class="n">totalfunctional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho0</span> <span class="o">=</span> <span class="n">rho0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="n">initial_kick</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">calc_j</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="n">potential</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">totalfunctional</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho0</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,</span> <span class="n">calcType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">potential</span>
+        <span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">Hamiltonian</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="n">Propagator</span><span class="p">(</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;crank-nicholson&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dipole</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calc_dipole</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictor_corrector</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictor_corrector</span> <span class="o">=</span> <span class="n">PredictorCorrector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="n">propagator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">functionals</span><span class="o">=</span><span class="n">totalfunctional</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictor_corrector</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor_corrector</span><span class="o">.</span><span class="n">psi_pred</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor_corrector</span><span class="o">.</span><span class="n">rho_pred</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor_corrector</span><span class="o">.</span><span class="n">j_pred</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">calc_dipole</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">delta_rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho0</span>
+        <span class="n">delta_mu</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta_rho</span> <span class="o">*</span> <span class="n">delta_rho</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">integral</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dipole</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delta_mu</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner2</span> <span class="o">=</span> <span class="n">Runner2</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">)</span>
+<span class="n">runner2</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>We can compare the dipole moment with and without the predictor-corrector. We can see noticable differences between them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">interval</span> <span class="o">*</span> <span class="n">max_steps</span><span class="p">,</span> <span class="n">max_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;w/o PC&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner2</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;w/ PC&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Dipole Moment (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_jupyter_td-ofdft-tutorial_31_0.png" src="../../_images/tutorials_jupyter_td-ofdft-tutorial_31_0.png" />
+</div>
+</div>
+<p>To check whether the predictor-corrector improves the result, we can run a propagation with the time-step 1/10 of the original one,</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner1b</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span> <span class="o">/</span> <span class="mi">10</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">)</span>
+<span class="n">runner1b</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>and we find the result is very close to the one with the predictor-corrector!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">interval</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_steps</span> <span class="o">//</span> <span class="mi">10</span><span class="p">),</span> <span class="n">max_steps</span> <span class="o">//</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">interval</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_steps</span> <span class="o">//</span> <span class="mi">10</span><span class="p">),</span> <span class="n">max_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner</span><span class="o">.</span><span class="n">dipole</span><span class="p">][:</span><span class="n">max_steps</span> <span class="o">//</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;w/o PC&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner2</span><span class="o">.</span><span class="n">dipole</span><span class="p">][:</span><span class="n">max_steps</span> <span class="o">//</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;w/ PC&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner1b</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;sm. timestep&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Dipole Moment (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_jupyter_td-ofdft-tutorial_35_0.png" src="../../_images/tutorials_jupyter_td-ofdft-tutorial_35_0.png" />
+</div>
+</div>
+</section>
+<section id="Using-nonadiabatic-functionals">
+<h2>Using nonadiabatic functionals<a class="headerlink" href="#Using-nonadiabatic-functionals" title="Link to this heading">¶</a></h2>
+<p>In many scenarios to achieve good result in TD-OFDFT, non-adiabatic Pauli potential is required. To use nonadiabatic functionals, one can simply create an instance of the functional and add it to the total functionals.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;DYNAMIC&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;JP1&#39;</span><span class="p">)</span>
+<span class="n">totalnonadiabatic</span> <span class="o">=</span> <span class="n">TotalFunctional</span><span class="p">(</span><span class="n">KineticEnergyFunctional</span><span class="o">=</span><span class="n">ke</span><span class="p">,</span>
+                                <span class="n">XCFunctional</span><span class="o">=</span><span class="n">xc</span><span class="p">,</span>
+                                <span class="n">HARTREE</span><span class="o">=</span><span class="n">hartree</span><span class="p">,</span>
+                                <span class="n">PSEUDO</span><span class="o">=</span><span class="n">pseudo</span><span class="p">,</span>
+                                <span class="n">Nonadiabatic</span><span class="o">=</span><span class="n">dyn</span>
+                                 <span class="p">)</span>
+<span class="n">runner2b</span> <span class="o">=</span> <span class="n">Runner2</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">totalnonadiabatic</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">)</span>
+<span class="n">runner2b</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>However, sometimes the above method can cause numerical instablities. In that case, one can use the nonadiabatic functional as a correction, e.g., for each time step, run a normal propagation without the nonadiabatic functional, then run 1st order Taylor propagator with just the nonadiabatic functional after it. Keep in mind this approximation requires the time step to be small, that’s why we use time step=0.1 here.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.td.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PotentialOperator</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Runner3</span><span class="p">(</span><span class="n">Runner2</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">correction</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Runner3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correction</span> <span class="o">=</span> <span class="n">correction</span>
+        <span class="n">correct_potential</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho0</span> <span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,</span> <span class="n">calcType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">potential</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taylor</span> <span class="o">=</span> <span class="n">Propagator</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;taylor&#39;</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="o">=</span><span class="n">PotentialOperator</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">correct_potential</span><span class="p">),</span> <span class="n">interval</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho0</span><span class="o">.</span><span class="n">integral</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="n">interval</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">correct_potential</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,</span> <span class="n">calcType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">potential</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taylor</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">correct_potential</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Runner3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taylor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">calc_rho</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">calc_j</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner3</span> <span class="o">=</span> <span class="n">Runner3</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">dyn</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span> <span class="o">/</span> <span class="mi">10</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">)</span>
+<span class="n">runner3</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>We can notice the effects of the nonadiabatic potential.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">interval</span> <span class="o">*</span> <span class="n">max_steps</span><span class="p">,</span> <span class="n">max_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">interval</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">max_steps</span><span class="p">,</span> <span class="n">max_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner2</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;TFW&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner2b</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;TFW+JP&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner3</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;TFW+JP w/ cor&#39;</span><span class="p">)</span>
+<span class="c1">#plt.plot(t, mua-mub)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Dipole Moment (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_jupyter_td-ofdft-tutorial_43_0.png" src="../../_images/tutorials_jupyter_td-ofdft-tutorial_43_0.png" />
+</div>
+</div>
+</section>
+<section id="Starting-with-more-accurate-ground-state-density">
+<h2>Starting with more accurate ground-state density<a class="headerlink" href="#Starting-with-more-accurate-ground-state-density" title="Link to this heading">¶</a></h2>
+<p>Another way to improve the result is to use nonlocal KEDFs for the adiabatic part of the Pauli potential. One can do it by directly replace the ke object with nonlocal functionals in the previous examples. However, nonlocal functionals can be quite costy. To reduce the cost, we can use the nonlocal functionals for just the ground state and do the propagation with TFW. Here is an example of how to set it up.</p>
+<p>First we run a ground state optimization with LMGP functional.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lmgp</span> <span class="o">=</span> <span class="n">Functional</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;KEDF&#39;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;LMGP&#39;</span><span class="p">,</span> <span class="n">kfmin</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">kfmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kdd</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">totalfunctionallmgp</span> <span class="o">=</span> <span class="n">TotalFunctional</span><span class="p">(</span><span class="n">KineticEnergyFunctional</span><span class="o">=</span><span class="n">lmgp</span><span class="p">,</span>
+                                <span class="n">XCFunctional</span><span class="o">=</span><span class="n">xc</span><span class="p">,</span>
+                                <span class="n">HARTREE</span><span class="o">=</span><span class="n">hartree</span><span class="p">,</span>
+                                <span class="n">PSEUDO</span><span class="o">=</span><span class="n">pseudo</span>
+                                 <span class="p">)</span>
+<span class="n">optimization_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;econv&#39;</span> <span class="p">:</span> <span class="mf">1e-5</span> <span class="o">*</span> <span class="n">nelec</span><span class="p">,</span> <span class="c1"># Energy Convergence (a.u./atom)</span>
+        <span class="s1">&#39;maxfun&#39;</span> <span class="p">:</span> <span class="mi">50</span><span class="p">,</span>   <span class="c1"># For TN method, it&#39;s the max steps for searching direction</span>
+        <span class="s1">&#39;maxiter&#39;</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="c1"># The max steps for optimization</span>
+        <span class="p">}</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">Optimization</span><span class="p">(</span><span class="n">EnergyEvaluator</span><span class="o">=</span><span class="n">totalfunctionallmgp</span><span class="p">,</span> <span class="n">optimization_options</span> <span class="o">=</span> <span class="n">optimization_options</span><span class="p">,</span>
+        <span class="n">optimization_method</span> <span class="o">=</span> <span class="s1">&#39;CG-HS&#39;</span><span class="p">)</span>
+<span class="n">rho0_lmgp</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">optimize_rho</span><span class="p">(</span><span class="n">guess_rho</span><span class="o">=</span><span class="n">rho_ini</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Step    Energy(a.u.)            dE              dP              Nd      Nls     Time(s)
+0       8.951916882520E+00      8.951917E+00    2.343046E+00    1       1       1.178473E+00
+1       -5.358661683759E+00     -1.431058E+01   1.440774E+00    1       4       5.350605E+00
+2       -6.540187821343E+00     -1.181526E+00   8.905294E-01    1       1       6.546497E+00
+3       -6.719284208293E+00     -1.790964E-01   2.779151E-01    1       2       8.732820E+00
+4       -6.814700763213E+00     -9.541655E-02   2.420885E-01    1       2       1.091322E+01
+5       -6.881804095249E+00     -6.710333E-02   1.265980E-01    1       1       1.198317E+01
+6       -6.915510119688E+00     -3.370602E-02   6.438285E-02    1       2       1.408356E+01
+7       -6.927742163817E+00     -1.223204E-02   2.962709E-02    1       2       1.618011E+01
+8       -6.938052763692E+00     -1.031060E-02   4.263892E-02    1       3       1.929235E+01
+9       -6.951519249120E+00     -1.346649E-02   3.496975E-02    1       3       2.239376E+01
+10      -6.960797397492E+00     -9.278148E-03   3.134603E-02    1       1       2.346912E+01
+11      -6.964521610474E+00     -3.724213E-03   7.827228E-03    1       2       2.561142E+01
+12      -6.966043503627E+00     -1.521893E-03   2.935270E-03    1       2       2.770020E+01
+13      -6.966831821600E+00     -7.883180E-04   2.759236E-03    1       1       2.879320E+01
+14      -6.967809081307E+00     -9.772597E-04   2.845584E-03    1       2       3.088838E+01
+15      -6.968762042125E+00     -9.529608E-04   1.882600E-03    1       1       3.195629E+01
+16      -6.969413723373E+00     -6.516812E-04   1.162236E-03    1       2       3.403143E+01
+17      -6.969926044300E+00     -5.123209E-04   1.216206E-03    1       1       3.508900E+01
+18      -6.970299410431E+00     -3.733661E-04   6.274758E-04    1       2       3.715920E+01
+19      -6.970469846011E+00     -1.704356E-04   4.109732E-04    1       2       3.929005E+01
+20      -6.970516689920E+00     -4.684391E-05   4.824496E-04    1       1       4.041310E+01
+21      -6.970537879916E+00     -2.119000E-05   2.063911E-04    1       1       4.148320E+01
+#### Density Optimization Converged ####
+Chemical potential (a.u.): -0.14428968086135627
+Chemical potential (eV)  : -3.9263218306092917
+</pre></div></div>
+</div>
+<p>To have the propagation run correctly, we need to introduce a potential equals the LMGP potential evaluated at the LMGP ground-state density minus the TFW potential evaluated at the same density.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.functional.external_potential</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExternalPotential</span>
+
+<span class="n">lmgp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<span class="n">vtf0</span> <span class="o">=</span> <span class="n">ke</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="n">rho0_lmgp</span><span class="p">,</span> <span class="n">calcType</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;V&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">potential</span>
+<span class="n">vlmgp0</span> <span class="o">=</span> <span class="n">lmgp</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="n">rho0_lmgp</span><span class="p">,</span> <span class="n">calcType</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;V&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">potential</span>
+<span class="n">ext</span> <span class="o">=</span> <span class="n">ExternalPotential</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">vlmgp0</span><span class="o">-</span><span class="n">vtf0</span><span class="p">)</span>
+<span class="n">totalfunctional</span><span class="o">.</span><span class="n">UpdateFunctional</span><span class="p">(</span><span class="n">newFuncDict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ext&#39;</span><span class="p">:</span><span class="n">ext</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner2c</span> <span class="o">=</span> <span class="n">Runner2</span><span class="p">(</span><span class="n">rho0_lmgp</span><span class="p">,</span> <span class="n">totalfunctional</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">)</span>
+<span class="n">runner2c</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>We can see using LMGP ground-state density as the initial condition makes a difference.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">interval</span> <span class="o">*</span> <span class="n">max_steps</span><span class="p">,</span> <span class="n">max_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner2</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;TFW den&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">runner2c</span><span class="o">.</span><span class="n">dipole</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;LMGP den&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Dipole Moment (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_jupyter_td-ofdft-tutorial_51_0.png" src="../../_images/tutorials_jupyter_td-ofdft-tutorial_51_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Pavanello Research Group.
+      <span class="lastupdated">Last updated on Thursday, 24 Jul 2025 14:03:30.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
